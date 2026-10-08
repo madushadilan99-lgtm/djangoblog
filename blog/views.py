@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
+from django.contrib.auth import login
 from .models import Post, Category
-from .forms import PostForm
+from .forms import PostForm, RegisterForm
 
 
 class PostListView(ListView):
@@ -66,3 +67,14 @@ class PostUpdateView(UpdateView):
             "post_detail",
             kwargs={"slug": self.object.slug}
         )
+
+
+class RegisterView(CreateView):
+    form_class = RegisterForm
+    template_name = "blog/register.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object)
+        return response

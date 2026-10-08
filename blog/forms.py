@@ -1,11 +1,20 @@
 from django import forms
 from .models import Post
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["title", "content", "category", "tags", "status"]
+        fields = [
+            "title",
+            "content",
+            "category",
+            "tags",
+            "status",
+            "cover_image",
+        ]
 
         widgets = {
             "title": forms.TextInput(
@@ -20,11 +29,14 @@ class PostForm(forms.ModelForm):
             "category": forms.Select(
                 attrs={"class": "form-select"}
             ),
-            "tags": forms.TextInput(
+            "tags": forms.SelectMultiple(
                 attrs={"class": "form-control"}
             ),
             "status": forms.Select(
                 attrs={"class": "form-select"}
+            ),
+            "cover_image": forms.ClearableFileInput(
+                attrs={"class": "form-control"}
             ),
         }
 
@@ -38,15 +50,15 @@ class PostForm(forms.ModelForm):
 
         return title
 
-    def clean(self):
-        cleaned_data = super().clean()
 
-        title = cleaned_data.get("title")
-        content = cleaned_data.get("content")
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
 
-        if title and content and title.lower() in content.lower()[:150]:
-            raise forms.ValidationError(
-                "タイトルの語句をコンテンツの先頭で繰り返さないでください。"
-            )
-
-        return cleaned_data
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+            "password1",
+            "password2"
+        ]
