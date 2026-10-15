@@ -8,7 +8,12 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
+from django.db import models
 
 from .models import Post, Category
 from .forms import PostForm, RegisterForm
@@ -48,6 +53,12 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
     def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Post.objects.filter(
+                models.Q(status="published")
+                | models.Q(author=self.request.user)
+            )
+
         return Post.objects.filter(status="published")
 
 
@@ -75,6 +86,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
+        messages.success(
+            self.request,
+            "Post created successfully!"
+        )
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -97,6 +114,14 @@ class PostUpdateView(
     def test_func(self):
         return self.get_object().author == self.request.user
 
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Post updated successfully!"
+        )
+
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse_lazy(
             "post_detail",
@@ -117,6 +142,14 @@ class PostDeleteView(
     def test_func(self):
         return self.get_object().author == self.request.user
 
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Post deleted successfully!"
+        )
+
+        return super().form_valid(form)
+
 
 class RegisterView(CreateView):
     form_class = RegisterForm
@@ -127,3 +160,11 @@ class RegisterView(CreateView):
         response = super().form_valid(form)
         login(self.request, self.object)
         return response
+
+
+def custom_403(request, exception):
+    return render(
+        request,
+        "blog/403.html",
+        status=403,
+    )

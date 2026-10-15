@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %}
+
+{% block title %}403 - Access Denied{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4">403</h1>
+
+        <h2>Access Denied</h2>
+
+        <p class="lead">
+            You don't have permission to do that.
+        </p>
+
+        <p>
+            Only the owner of this post can edit or delete it.
+        </p>
+
+        <a href="{% url 'home' %}" class="btn btn-primary">
+            Go Home
+        </a>
+    </div>
+</div>
+{% endblock %}
