@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     ListView,
     DetailView,
@@ -47,6 +47,30 @@ class MyPostsView(LoginRequiredMixin, ListView):
         ).order_by("-created_at")
 
 
+class CategoryPostsView(ListView):
+    model = Post
+    template_name = "blog/category_posts.html"
+    context_object_name = "posts"
+    paginate_by = 6
+
+    def get_queryset(self):
+        self.category = get_object_or_404(
+            Category,
+            pk=self.kwargs["pk"],
+        )
+
+        return Post.objects.filter(
+            status="published",
+            category=self.category,
+        ).order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        context["categories"] = Category.objects.all()
+        return context
+
+
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
@@ -66,7 +90,7 @@ def about(request):
     return render(
         request,
         "blog/about.html",
-        {"content": "This is the Djangoblog team."}
+        {"content": "This is the Djangoblog team."},
     )
 
 
@@ -74,7 +98,7 @@ def contact(request):
     return render(
         request,
         "blog/contact.html",
-        {"contact": "This is the Contact Page."}
+        {"contact": "This is the Contact Page."},
     )
 
 
@@ -89,7 +113,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         messages.success(
             self.request,
-            "Post created successfully!"
+            "Post created successfully!",
         )
 
         return super().form_valid(form)
@@ -97,14 +121,14 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy(
             "post_detail",
-            kwargs={"slug": self.object.slug}
+            kwargs={"slug": self.object.slug},
         )
 
 
 class PostUpdateView(
     LoginRequiredMixin,
     UserPassesTestMixin,
-    UpdateView
+    UpdateView,
 ):
     model = Post
     form_class = PostForm
@@ -117,7 +141,7 @@ class PostUpdateView(
     def form_valid(self, form):
         messages.success(
             self.request,
-            "Post updated successfully!"
+            "Post updated successfully!",
         )
 
         return super().form_valid(form)
@@ -125,14 +149,14 @@ class PostUpdateView(
     def get_success_url(self):
         return reverse_lazy(
             "post_detail",
-            kwargs={"slug": self.object.slug}
+            kwargs={"slug": self.object.slug},
         )
 
 
 class PostDeleteView(
     LoginRequiredMixin,
     UserPassesTestMixin,
-    DeleteView
+    DeleteView,
 ):
     model = Post
     template_name = "blog/post_confirm_delete.html"
@@ -145,7 +169,7 @@ class PostDeleteView(
     def form_valid(self, form):
         messages.success(
             self.request,
-            "Post deleted successfully!"
+            "Post deleted successfully!",
         )
 
         return super().form_valid(form)

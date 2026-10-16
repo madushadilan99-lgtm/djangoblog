@@ -27,18 +27,38 @@
 
 {% include "blog/partials/_pagination.html" %}
 
-<hr>
+<hr class="my-4">
 
-<h5>Categories</h5>
+<section class="mt-4">
 
-<ul class="list-unstyled">
+    <h5 class="mb-3">Categories</h5>
 
-    {% for category in categories %}
-        <li>
-            {{ category.name }} ({{ category.posts.count }})
-        </li>
-    {% endfor %}
+    <ul class="list-unstyled">
 
-</ul>
+        {% for category in categories %}
+
+            <li class="mb-2">
+
+                <a href="{% url 'category_posts' category.pk %}">
+                    {{ category.name }}
+                </a>
+
+                <span class="text-muted">
+                    ({{ category.posts.count }})
+                </span>
+
+            </li>
+
+        {% empty %}
+
+            <li class="text-muted">
+                No categories available.
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+</section>
 
 {% endblock %}

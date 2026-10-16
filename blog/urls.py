@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from .views import (
     PostListView,
+    CategoryPostsView,
     PostDetailView,
     PostCreateView,
     PostUpdateView,
@@ -16,6 +17,13 @@ from .views import (
 
 urlpatterns = [
     path("", PostListView.as_view(), name="home"),
+
+    # Category Posts
+    path(
+        "category/<int:pk>/",
+        CategoryPostsView.as_view(),
+        name="category_posts",
+    ),
 
     # Password Reset - Step 1
     path(

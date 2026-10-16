@@ -1,12 +1,14 @@
 {% if page_obj.has_other_pages %}
 
-<nav>
+<nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
 
         {% if page_obj.has_previous %}
             <li class="page-item">
-                <a class="page-link"
-                   href="?page={{ page_obj.previous_page_number }}">
+                <a
+                    class="page-link"
+                    href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category|urlencode }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}"
+                >
                     Previous
                 </a>
             </li>
@@ -14,14 +16,17 @@
 
         <li class="page-item disabled">
             <span class="page-link">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                Page {{ page_obj.number }}
+                / {{ page_obj.paginator.num_pages }}
             </span>
         </li>
 
         {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link"
-                   href="?page={{ page_obj.next_page_number }}">
+                <a
+                    class="page-link"
+                    href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category|urlencode }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}"
+                >
                     Next
                 </a>
             </li>
