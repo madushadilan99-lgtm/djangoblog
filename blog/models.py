@@ -30,25 +30,25 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="posts"
+        related_name="posts",
     )
 
     cover_image = models.ImageField(
         upload_to="post_covers/",
         blank=True,
-        null=True
+        null=True,
     )
 
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default="published"
+        default="published",
     )
 
     tags = models.ManyToManyField(
         Tag,
         blank=True,
-        related_name="posts"
+        related_name="posts",
     )
 
     category = models.ForeignKey(
@@ -56,7 +56,7 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="posts"
+        related_name="posts",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

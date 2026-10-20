@@ -25,13 +25,25 @@ class PostListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Post.objects.filter(
+        queryset = Post.objects.filter(
             status="published"
         ).order_by("-created_at")
+
+        category_name = self.request.GET.get("category", "").strip()
+
+        if category_name:
+            queryset = queryset.filter(
+                category__name__iexact=category_name
+            )
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        context["selected_category"] = self.request.GET.get(
+            "category", ""
+        ).strip()
         return context
 
 
