@@ -11,12 +11,19 @@ from .views import (
     MyPostsView,
     about,
     contact,
+    add_comment,
+    delete_comment,
     RegisterView,
 )
 
 
 urlpatterns = [
-    path("", PostListView.as_view(), name="home"),
+    # Home
+    path(
+        "",
+        PostListView.as_view(),
+        name="home",
+    ),
 
     # Category Posts
     path(
@@ -55,48 +62,70 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 
+    # My Posts
     path(
         "my-posts/",
         MyPostsView.as_view(),
         name="my_posts",
     ),
 
+    # Register
     path(
         "register/",
         RegisterView.as_view(),
         name="register",
     ),
 
+    # Create Post
     path(
         "posts/new/",
         PostCreateView.as_view(),
         name="post_create",
     ),
 
+    # Edit Post
     path(
         "posts/<slug:slug>/edit/",
         PostUpdateView.as_view(),
         name="post_edit",
     ),
 
+    # Delete Post
     path(
         "posts/<slug:slug>/delete/",
         PostDeleteView.as_view(),
         name="post_delete",
     ),
 
+    # Add Comment
+    path(
+        "posts/<slug:slug>/comment/",
+        add_comment,
+        name="add_comment",
+    ),
+
+    # Delete Comment
+    path(
+        "comments/<int:pk>/delete/",
+        delete_comment,
+        name="delete_comment",
+    ),
+
+    # Post Detail
     path(
         "posts/<slug:slug>/",
         PostDetailView.as_view(),
         name="post_detail",
     ),
 
+    # About
     path(
         "about/",
         about,
         name="about",
     ),
 
+    # Contact
     path(
         "contact/",
         contact,

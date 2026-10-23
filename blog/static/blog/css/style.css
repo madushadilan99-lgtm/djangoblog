@@ -1,13 +1,223 @@
+/* General page style */
 body {
-   background-color: #f8f9fa;
- }
+    background-color: #f4f6fb;
+    color: #212529;
+    font-family: Arial, sans-serif;
+}
 
- .navbar-brand {
-   font-weight: bold;
-   letter-spacing: 0.5px;
- }
- /* Responsive post card images */
+/* Navigation bar */
+.navbar {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+/* Post cards */
+.card {
+    border-radius: 14px !important;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Post images */
 .card-img-top {
-    height: 200px;
+    width: 100%;
+    height: 220px !important;
     object-fit: cover;
+}
+
+/* Post titles */
+.card-title {
+    color: #212529;
+    line-height: 1.4;
+}
+
+/* Post description */
+.card-text {
+    line-height: 1.7;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 7px;
+}
+
+/* Page spacing */
+.container {
+    padding-bottom: 20px;
+}
+
+/* Footer */
+footer {
+    background-color: #ffffff;
+    font-size: 0.9rem;
+}
+/* Japan Journey story cards */
+.journey-card-column {
+    animation: journeyCardEnter .6s ease both;
+}
+
+.journey-story-card {
+    border: 1px solid #e7edf5 !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 24px rgba(25, 43, 67, .06);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.journey-story-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(25, 43, 67, .13);
+}
+
+.journey-story-image {
+    position: relative;
+    overflow: hidden;
+    background: #eaf0f7;
+}
+
+.journey-story-image .card-img-top {
+    display: block;
+    width: 100%;
+    height: 225px !important;
+    object-fit: cover;
+    transition: transform .55s ease;
+}
+
+.journey-story-card:hover .card-img-top {
+    transform: scale(1.045);
+}
+
+.journey-no-image {
+    height: 225px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #62748b;
+    background: linear-gradient(135deg, #edf4fc, #dce9f8);
+}
+
+.journey-no-image span {
+    font-size: 35px;
+    color: #1677ee;
+    margin-bottom: 8px;
+}
+
+.journey-story-category {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    background: rgba(12, 29, 52, .88);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.journey-story-body {
+    padding: 22px !important;
+}
+
+.journey-story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    color: #8290a4;
+    font-size: 11px;
+    margin-bottom: 12px;
+}
+
+.journey-meta-dot {
+    color: #1677ee;
+}
+
+.journey-story-title {
+    color: #192b43;
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.45;
+    margin-bottom: 12px;
+}
+
+.journey-story-description {
+    color: #66758a;
+    font-size: 13px;
+    line-height: 1.85;
+    margin-bottom: 20px;
+}
+
+.journey-story-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 15px;
+    border-top: 1px solid #edf1f6;
+}
+
+.journey-read-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1677ee;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.journey-read-link span {
+    transition: transform .2s ease;
+}
+
+.journey-read-link:hover {
+    color: #075bc4;
+}
+
+.journey-read-link:hover span {
+    transform: translateX(4px);
+}
+
+.journey-owner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.journey-owner-actions .btn {
+    font-size: 11px;
+    border-radius: 7px;
+}
+
+@keyframes journeyCardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .journey-card-column,
+    .journey-story-card,
+    .journey-story-image .card-img-top {
+        animation: none;
+        transition: none;
+    }
 }

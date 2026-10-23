@@ -4,33 +4,138 @@
 
 {% block content %}
 
-<h1>{{ post.title }}</h1>
+<div class="container mt-4">
 
-<p class="text-muted">
-    By {{ post.author.username }}
-    on {{ post.created_at|date:"M d, Y" }}
-</p>
+    <!-- Post Details -->
+    <h1>{{ post.title }}</h1>
 
-{% if post.cover_image %}
-    <img src="{{ post.cover_image.url }}"
-         alt="{{ post.title }}"
-         class="img-fluid mb-3">
-{% endif %}
+    <p class="text-muted">
+        By {{ post.author.username }}
+        on {{ post.created_at|date:"M d, Y" }}
+    </p>
 
-<p>{{ post.content }}</p>
+    {% if post.cover_image %}
+        <img src="{{ post.cover_image.url }}"
+             alt="{{ post.title }}"
+             class="img-fluid mb-3 rounded">
+    {% endif %}
 
-{% if post.author == request.user %}
+    <div class="mb-4">
+        {{ post.content|linebreaks }}
+    </div>
 
-    <a href="{% url 'post_edit' post.slug %}"
-       class="btn btn-sm btn-outline-secondary">
-        Edit
-    </a>
+    <!-- Edit and Delete Post Buttons -->
+    {% if post.author == request.user %}
 
-    <a href="{% url 'post_delete' post.slug %}"
-       class="btn btn-sm btn-outline-danger">
-        Delete
-    </a>
+        <a href="{% url 'post_edit' post.slug %}"
+           class="btn btn-sm btn-outline-secondary">
+            Edit
+        </a>
 
-{% endif %}
+        <a href="{% url 'post_delete' post.slug %}"
+           class="btn btn-sm btn-outline-danger">
+            Delete Post
+        </a>
+
+    {% endif %}
+
+    <hr class="my-4">
+
+    <!-- Comments Section -->
+    <h3 class="mb-3">
+        Comments ({{ comments.count }})
+    </h3>
+
+    {% if user.is_authenticated %}
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h5 class="card-title">Leave a Comment</h5>
+
+                <form method="post"
+                      action="{% url 'add_comment' post.slug %}">
+
+                    {% csrf_token %}
+
+                    {{ comment_form.content.label_tag }}
+                    {{ comment_form.content }}
+
+                    {% if comment_form.content.errors %}
+                        <div class="text-danger mt-2">
+                            {{ comment_form.content.errors }}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit"
+                            class="btn btn-primary mt-3">
+                        Post Comment
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+    {% else %}
+
+        <p>
+            Please <a href="{% url 'login' %}">log in</a>
+            to leave a comment.
+        </p>
+
+    {% endif %}
+
+    <!-- Display Existing Comments -->
+    {% for comment in comments %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <h6 class="card-title mb-1">
+                    {{ comment.author.username }}
+                </h6>
+
+                <small class="text-muted">
+                    {{ comment.created_at|date:"M d, Y - h:i A" }}
+                </small>
+
+                <p class="card-text mt-2 mb-0">
+                    {{ comment.content|linebreaksbr }}
+                </p>
+
+                <!-- Delete Comment Button -->
+                {% if user.is_authenticated %}
+                    {% if comment.author == request.user or post.author == request.user %}
+
+                        <form method="post"
+                              action="{% url 'delete_comment' comment.pk %}"
+                              class="mt-3"
+                              onsubmit="return confirm('Are you sure you want to delete this comment?');">
+
+                            {% csrf_token %}
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger">
+                                Delete Comment
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% empty %}
+
+        <p class="text-muted">
+            No comments yet. Be the first to comment!
+        </p>
+
+    {% endfor %}
+
+</div>
 
 {% endblock %}

@@ -4,24 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}DjangoBlog{% endblock %}</title>
+    <title>{% block title %}Japan Journey | DjangoBlog{% endblock %}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
     {% load static %}
-    <link rel="stylesheet"
-          href="{% static 'blog/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+
+    <style>
+        body {
+            background: #f7f9fc;
+            color: #192b43;
+            font-family: Arial, sans-serif;
+        }
+
+        .journey-navbar {
+            background: rgba(12, 29, 52, 0.97);
+            padding: 15px 0;
+            box-shadow: 0 5px 25px rgba(12, 29, 52, 0.12);
+        }
+
+        .journey-brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: #fff !important;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .journey-brand-mark {
+            display: grid;
+            place-items: center;
+            width: 39px;
+            height: 39px;
+            border-radius: 12px;
+            background: #1677ee;
+            color: white;
+            font-size: 20px;
+        }
+
+        .journey-subbrand {
+            display: block;
+            margin-top: 3px;
+            color: #a9c4e5;
+            font-size: 9px;
+            letter-spacing: 3px;
+        }
+
+        .journey-navbar .nav-link {
+            color: #d4dfed !important;
+            font-size: 13px;
+            padding: 10px 13px !important;
+            transition: color .2s ease;
+        }
+
+        .journey-navbar .nav-link:hover,
+        .journey-navbar .nav-link.active {
+            color: #7dd3fc !important;
+        }
+
+        .journey-navbar .navbar-toggler {
+            border-color: rgba(255,255,255,.3);
+        }
+
+        .journey-navbar .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(125,211,252,.2);
+        }
+
+        .journey-write-btn {
+            background: #1677ee;
+            color: white !important;
+            border-radius: 8px;
+            padding: 10px 15px !important;
+            font-weight: 700;
+            transition: background .2s ease, transform .2s ease;
+        }
+
+        .journey-write-btn:hover {
+            background: #075bc4;
+            transform: translateY(-2px);
+        }
+
+        .journey-account {
+            color: #d4dfed;
+            font-size: 12px;
+            padding: 8px 10px;
+        }
+
+        .journey-outline-btn {
+            border: 1px solid #8298b3;
+            color: white;
+            border-radius: 8px;
+            font-size: 12px;
+            padding: 8px 13px;
+        }
+
+        .journey-outline-btn:hover {
+            background: white;
+            color: #192b43;
+        }
+
+        .journey-main {
+            min-height: 65vh;
+        }
+
+        .journey-footer {
+            background: #0c1d34;
+            color: #c4d2e4;
+            padding: 30px 15px;
+            font-size: 12px;
+        }
+
+        .journey-footer strong {
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 991px) {
+            .journey-navbar .navbar-nav {
+                padding-top: 8px;
+            }
+
+            .journey-navbar .nav-link {
+                padding: 10px 4px !important;
+            }
+
+            .journey-account {
+                padding-left: 4px;
+            }
+
+            .journey-write-btn {
+                display: inline-block;
+                width: fit-content;
+                margin: 5px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-dark journey-navbar">
+    <div class="container">
 
-        <a class="navbar-brand"
-           href="{% url 'home' %}">
-            DjangoBlog
+        <a class="navbar-brand journey-brand" href="{% url 'home' %}">
+            <span class="journey-brand-mark">旅</span>
+            <span>
+                JAPAN JOURNEY
+                <span class="journey-subbrand">STORIES FROM JAPAN</span>
+            </span>
         </a>
 
         <button class="navbar-toggler"
@@ -36,69 +177,51 @@
 
         <div class="collapse navbar-collapse" id="navMenu">
 
-            <div class="navbar-nav me-auto">
+            <div class="navbar-nav me-auto ms-lg-4">
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active fw-bold text-decoration-underline{% endif %}"
-                   href="{% url 'home' %}">
-                    Home
-                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                   href="{% url 'home' %}">Home</a>
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active fw-bold text-decoration-underline{% endif %}"
-                   href="{% url 'about' %}">
-                    About
-                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                   href="{% url 'about' %}">About</a>
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active fw-bold text-decoration-underline{% endif %}"
-                   href="{% url 'contact' %}">
-                    Contact
-                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                   href="{% url 'contact' %}">Contact</a>
 
                 {% if request.user.is_authenticated %}
-
-                    <a class="nav-link {% if request.resolver_match.url_name == 'my_posts' %}active fw-bold text-decoration-underline{% endif %}"
-                       href="{% url 'my_posts' %}">
-                        My Posts
-                    </a>
-
-                    <a class="nav-link {% if request.resolver_match.url_name == 'post_create' %}active fw-bold text-decoration-underline{% endif %}"
-                       href="{% url 'post_create' %}">
-                        New Post
-                    </a>
-
+                    <a class="nav-link {% if request.resolver_match.url_name == 'my_posts' %}active{% endif %}"
+                       href="{% url 'my_posts' %}">My Stories</a>
                 {% endif %}
 
             </div>
 
-            <div class="navbar-nav align-items-lg-center">
+            <div class="navbar-nav align-items-lg-center gap-lg-2">
 
                 {% if request.user.is_authenticated %}
 
-                    <span class="navbar-text text-white me-2">
-                        {{ request.user.username }}
+                    <a class="nav-link journey-write-btn"
+                       href="{% url 'post_create' %}">+ Write a Story</a>
+
+                    <span class="journey-account">
+                        Hi, {{ request.user.username }}
                     </span>
 
                     <form method="post"
                           action="{% url 'logout' %}"
                           class="d-inline">
                         {% csrf_token %}
-
                         <button type="submit"
-                                class="btn btn-outline-light btn-sm my-1">
+                                class="btn journey-outline-btn my-1">
                             Logout
                         </button>
                     </form>
 
                 {% else %}
 
-                    <a class="btn btn-outline-light btn-sm me-2 my-1"
-                       href="{% url 'login' %}">
-                        Login
-                    </a>
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
 
-                    <a class="btn btn-outline-light btn-sm my-1"
-                       href="{% url 'register' %}">
-                        Register
-                    </a>
+                    <a class="nav-link journey-write-btn"
+                       href="{% url 'register' %}">Join the Journey +</a>
 
                 {% endif %}
 
@@ -108,34 +231,32 @@
     </div>
 </nav>
 
-<div class="container mt-4">
+<main class="container journey-main mt-4">
 
     {% if messages %}
         {% for message in messages %}
-
             <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
                  role="alert">
-
                 {{ message }}
-
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="alert"
-                        aria-label="Close">
-                </button>
-
+                        aria-label="Close"></button>
             </div>
-
         {% endfor %}
     {% endif %}
 
     {% block content %}{% endblock %}
 
-</div>
+</main>
+
+<footer class="journey-footer text-center mt-5">
+    <p class="mb-2"><strong>JAPAN JOURNEY</strong></p>
+    <p class="mb-2">Places to wander, flavors to remember, stories to share.</p>
+    <p class="mb-0">&copy; 2026 Japan Journey. Built with Django.</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<footer class="text-center text-muted py-4 mt-5 border-top">
-    <p>&copy; 2026 DjangoBlog. Built as a learning project.</p>
-</footer>
+
 </body>
 </html>

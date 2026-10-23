@@ -1,64 +1,378 @@
 {% extends "blog/base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Japan Journey | DjangoBlog{% endblock %}
 
 {% block content %}
 
-<div class="row">
+<style>
+.journey-home {
+    color: #192b43;
+    font-family: Arial, sans-serif;
+}
 
-    {% for post in page_obj %}
+.journey-hero {
+    min-height: 390px;
+    display: flex;
+    align-items: center;
+    padding: 45px;
+    margin-bottom: 38px;
+    border-radius: 20px;
+    overflow: hidden;
+    color: white;
+    background:
+        linear-gradient(90deg, rgba(8,25,48,.88), rgba(8,25,48,.15)),
+        url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1800&q=85")
+        center / cover no-repeat;
+    animation: fadeIn 1.2s ease both;
+}
 
-        {% include "blog/partials/_post_card.html" %}
+.journey-hero-content {
+    max-width: 590px;
+}
 
-    {% empty %}
+.journey-eyebrow {
+    color: #a9dcff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    margin-bottom: 18px;
+}
 
-        <div class="col-12">
-            <p class="text-center text-muted py-5">
-                No posts yet.
-                <a href="{% url 'post_create' %}">
-                    Write your first post
-                </a>
+.journey-title {
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    animation: riseIn 1s ease .2s both;
+}
+
+.journey-title span {
+    color: #7dd3fc;
+}
+
+.journey-description {
+    max-width: 450px;
+    line-height: 1.8;
+    color: #f0f6ff;
+    animation: riseIn 1s ease .4s both;
+}
+
+.journey-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.journey-btn {
+    display: inline-block;
+    padding: 13px 21px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: .25s ease;
+}
+
+.journey-btn:hover {
+    transform: translateY(-3px);
+}
+
+.journey-btn-primary {
+    background: #1677ee;
+    color: white;
+}
+
+.journey-btn-primary:hover {
+    background: #075bc4;
+    color: white;
+}
+
+.journey-btn-outline {
+    color: white;
+    border: 1px solid white;
+    background: rgba(255,255,255,.08);
+}
+
+.journey-btn-outline:hover {
+    background: white;
+    color: #192b43;
+}
+
+.journey-section {
+    margin-bottom: 38px;
+}
+
+.journey-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.journey-heading h2 {
+    font-size: 23px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.journey-heading h2 span {
+    color: #1677ee;
+}
+
+.journey-category {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 16px 12px;
+    border: 1px solid #e8eef5;
+    border-radius: 13px;
+    background: white;
+    color: #192b43;
+    text-decoration: none;
+    box-shadow: 0 5px 18px rgba(28,55,90,.05);
+    transition: .25s ease;
+}
+
+.journey-category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(28,55,90,.12);
+    color: #1677ee;
+}
+
+.journey-category-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #eaf3ff;
+    color: #1677ee;
+    font-size: 20px;
+}
+
+.journey-category-name {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.journey-category-count {
+    display: block;
+    margin-top: 4px;
+    color: #8290a4;
+    font-size: 11px;
+}
+
+.journey-post-grid > div {
+    margin-bottom: 24px;
+}
+
+.journey-post-grid .card {
+    height: 100%;
+    border: 1px solid #e9eef5 !important;
+    border-radius: 15px !important;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 5px 20px rgba(26,48,78,.06);
+    transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.journey-post-grid .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 32px rgba(26,48,78,.12);
+}
+
+.journey-post-grid .card-img-top {
+    height: 220px !important;
+    object-fit: cover;
+}
+
+.journey-empty {
+    padding: 50px 20px;
+    border: 1px dashed #cdd9e8;
+    border-radius: 18px;
+    background: #f8fbff;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes riseIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 767px) {
+    .journey-hero {
+        min-height: 370px;
+        padding: 28px 22px;
+        background-position: center;
+    }
+
+    .journey-title {
+        font-size: 39px;
+    }
+
+    .journey-heading h2 {
+        font-size: 20px;
+    }
+
+    .journey-post-grid .card-img-top {
+        height: 200px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .journey-hero,
+    .journey-title,
+    .journey-description {
+        animation: none;
+    }
+}
+</style>
+
+<div class="journey-home">
+
+    <section class="journey-hero">
+        <div class="journey-hero-content">
+
+            <div class="journey-eyebrow">
+                DISCOVER JAPAN · ONE STORY AT A TIME
+            </div>
+
+            <h1 class="journey-title">
+                Find Your Own Way<br>
+                Into <span>Japan.</span>
+            </h1>
+
+            <p class="journey-description">
+                Places to wander, flavors to remember,
+                and little moments that stay with you.
+                Your next story starts here.
             </p>
+
+            <div class="journey-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'post_create' %}"
+                       class="journey-btn journey-btn-primary">
+                        + Write a Story
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}"
+                       class="journey-btn journey-btn-primary">
+                        Start Your Journey →
+                    </a>
+                {% endif %}
+
+                <a href="#latest-stories"
+                   class="journey-btn journey-btn-outline">
+                    Explore Stories ↓
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="journey-section">
+        <div class="journey-heading">
+            <h2><span>✦</span> Explore by Category</h2>
         </div>
 
-    {% endfor %}
+        <div class="row g-3">
+            {% for category in categories %}
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a class="journey-category"
+                       href="{% url 'category_posts' category.pk %}">
+
+                        <span class="journey-category-icon">
+                            {% if "food" in category.name|lower %}
+                                ♨
+                            {% elif "place" in category.name|lower %}
+                                ◉
+                            {% elif "culture" in category.name|lower %}
+                                ✿
+                            {% elif "sport" in category.name|lower %}
+                                ◎
+                            {% elif "product" in category.name|lower %}
+                                ◈
+                            {% else %}
+                                ✦
+                            {% endif %}
+                        </span>
+
+                        <span>
+                            <span class="journey-category-name">
+                                {{ category.name }}
+                            </span>
+                            <span class="journey-category-count">
+                                {{ category.posts.count }} posts
+                            </span>
+                        </span>
+
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <p class="text-muted">No categories available yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="journey-section" id="latest-stories">
+        <div class="journey-heading">
+            <h2><span>✦</span> Latest Stories</h2>
+            <span class="text-muted small">
+                Discover something new
+            </span>
+        </div>
+
+        <div class="row journey-post-grid">
+            {% for post in page_obj %}
+
+                {% include "blog/partials/_post_card.html" %}
+
+            {% empty %}
+
+                <div class="col-12">
+                    <div class="journey-empty">
+                        <h3>No stories yet</h3>
+                        <p>Be the first to share your story.</p>
+
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'post_create' %}"
+                               class="journey-btn journey-btn-primary">
+                                Write Your First Story
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}"
+                               class="journey-btn journey-btn-primary">
+                                Login to Get Started
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+
+        {% include "blog/partials/_pagination.html" %}
+    </section>
 
 </div>
-
-{% include "blog/partials/_pagination.html" %}
-
-<hr class="my-4">
-
-<section class="mt-4">
-
-    <h5 class="mb-3">Categories</h5>
-
-    <ul class="list-unstyled">
-
-        {% for category in categories %}
-
-            <li class="mb-2">
-
-                <a href="{% url 'category_posts' category.pk %}">
-                    {{ category.name }}
-                </a>
-
-                <span class="text-muted">
-                    ({{ category.posts.count }})
-                </span>
-
-            </li>
-
-        {% empty %}
-
-            <li class="text-muted">
-                No categories available.
-            </li>
-
-        {% endfor %}
-
-    </ul>
-
-</section>
 
 {% endblock %}

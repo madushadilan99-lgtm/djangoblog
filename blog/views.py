@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (
     ListView,
     DetailView,
@@ -15,8 +15,8 @@ from django.contrib.auth.mixins import (
 )
 from django.db import models
 
-from .models import Post, Category
-from .forms import PostForm, RegisterForm
+from .models import Post, Category, Comment
+from .forms import PostForm, RegisterForm, CommentForm
 
 
 class PostListView(ListView):
@@ -97,6 +97,68 @@ class PostDetailView(DetailView):
 
         return Post.objects.filter(status="published")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comments"] = self.object.comments.select_related(
+            "author"
+        ).order_by("-created_at")
+        context["comment_form"] = CommentForm()
+        return context
+
+
+def add_comment(request, slug):
+    if not request.user.is_authenticated:
+        messages.info(request, "Please log in to leave a comment.")
+        return redirect("login")
+
+    post = get_object_or_404(
+        Post.objects.filter(status="published"),
+        slug=slug,
+    )
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+
+            messages.success(request, "Comment added successfully!")
+        else:
+            messages.error(request, "Please enter a valid comment.")
+
+    return redirect("post_detail", slug=post.slug)
+
+
+def delete_comment(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    comment = get_object_or_404(
+        Comment.objects.select_related("post", "post__author"),
+        pk=pk,
+    )
+
+    if request.method == "POST":
+        if (
+            comment.author == request.user
+            or comment.post.author == request.user
+        ):
+            post_slug = comment.post.slug
+            comment.delete()
+            messages.success(request, "Comment deleted successfully!")
+            return redirect("post_detail", slug=post_slug)
+
+        messages.error(
+            request,
+            "You do not have permission to delete this comment.",
+        )
+        return redirect("post_detail", slug=comment.post.slug)
+
+    return redirect("post_detail", slug=comment.post.slug)
+
 
 def about(request):
     return render(
@@ -122,12 +184,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-
         messages.success(
             self.request,
             "Post created successfully!",
         )
-
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -155,7 +215,6 @@ class PostUpdateView(
             self.request,
             "Post updated successfully!",
         )
-
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -183,7 +242,6 @@ class PostDeleteView(
             self.request,
             "Post deleted successfully!",
         )
-
         return super().form_valid(form)
 
 

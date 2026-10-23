@@ -1,31 +1,308 @@
 {% extends "blog/base.html" %}
 
-{% block title %}Contact - DjangoBlog{% endblock %}
+{% block title %}Contact Us | Japan Journey{% endblock %}
 
 {% block content %}
 
-<div class="container py-4">
-    <div class="card shadow-sm">
-        <div class="card-body">
+<style>
+.contact-page {
+    color: #192b43;
+    font-family: Arial, sans-serif;
+}
+
+.contact-hero {
+    padding: 65px 0;
+    color: white;
+    background:
+        linear-gradient(90deg, rgba(12, 30, 55, .82), rgba(12, 30, 55, .25)),
+        url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1600&q=80");
+    background-size: cover;
+    background-position: center;
+}
+
+.contact-hero h1 {
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+}
+
+.contact-hero p {
+    max-width: 550px;
+    line-height: 1.9;
+}
+
+.contact-content {
+    padding: 55px 0;
+}
+
+.contact-info-card,
+.contact-form-card {
+    height: 100%;
+    padding: 30px;
+    border: 1px solid #e7edf5;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 8px 30px rgba(25, 43, 67, .06);
+}
+
+.contact-label {
+    color: #1677ee;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.contact-heading {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 12px 0;
+}
+
+.contact-description {
+    color: #6b7a8e;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.contact-info-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-top: 25px;
+}
+
+.contact-icon {
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf2ff;
+    border-radius: 12px;
+    font-size: 21px;
+}
+
+.contact-info-item h3 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.contact-info-item p {
+    color: #6b7a8e;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+.contact-form-card label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.contact-form-card input,
+.contact-form-card textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #dce4ef;
+    border-radius: 9px;
+    font-size: 14px;
+    outline: none;
+    background: #fbfcfe;
+}
+
+.contact-form-card input:focus,
+.contact-form-card textarea:focus {
+    border-color: #1677ee;
+    box-shadow: 0 0 0 3px rgba(22, 119, 238, .1);
+}
+
+.contact-form-card textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.contact-submit {
+    display: inline-block;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #1677ee;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.contact-submit:hover {
+    background: #075bc4;
+}
+
+.contact-back {
+    display: inline-block;
+    margin-top: 25px;
+    color: #1677ee;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (max-width: 767px) {
+    .contact-hero {
+        padding: 45px 0;
+    }
+
+    .contact-content {
+        padding: 30px 0;
+    }
+
+    .contact-info-card,
+    .contact-form-card {
+        padding: 23px;
+    }
+}
+</style>
+
+<div class="contact-page">
+
+    <section class="contact-hero">
+        <div class="container">
+            <p class="mb-2">JAPAN JOURNEY · GET IN TOUCH</p>
 
             <h1>Contact Us</h1>
 
-            <p>
-                If you have questions or feedback about DjangoBlog,
-                we welcome your suggestions and comments.
-                Thank you for visiting!
+            <p class="mb-0">
+                Have a question or a travel story to share?
+                We'd love to hear from you. Let's connect
+                and discover Japan together.
             </p>
-
-            <p class="text-muted">
-                {{ contact }}
-            </p>
-
-            <a href="{% url 'home' %}" class="btn btn-primary">
-                Back to Home
-            </a>
-
         </div>
-    </div>
+    </section>
+
+    <section class="contact-content">
+        <div class="container">
+            <div class="row g-4">
+
+                <div class="col-lg-5">
+                    <div class="contact-info-card">
+
+                        <div class="contact-label">
+                            — SAY HELLO
+                        </div>
+
+                        <h2 class="contact-heading">
+                            Let's Talk About Japan
+                        </h2>
+
+                        <p class="contact-description">
+                            Whether you have feedback, a question,
+                            or an idea for a future story, your
+                            message is welcome.
+                        </p>
+
+                        <div class="contact-info-item">
+                            <div class="contact-icon">🗻</div>
+                            <div>
+                                <h3>Explore Japan</h3>
+                                <p>
+                                    Discover beautiful destinations,
+                                    culture, food, and travel stories.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-icon">💌</div>
+                            <div>
+                                <h3>Share Your Thoughts</h3>
+                                <p>
+                                    Send us your questions,
+                                    suggestions, and feedback.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-icon">🌸</div>
+                            <div>
+                                <h3>Thank You</h3>
+                                <p>
+                                    Thank you for being part
+                                    of our Japan Journey!
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="contact-form-card">
+
+                        <div class="contact-label">
+                            — YOUR MESSAGE
+                        </div>
+
+                        <h2 class="contact-heading">
+                            Send Us a Message
+                        </h2>
+
+                        <p class="contact-description mb-4">
+                            Fill in the details below.
+                        </p>
+
+                        <form action="mailto:" method="post"
+                              enctype="text/plain">
+
+                            <label for="contact-name">
+                                Your Name
+                            </label>
+                            <input
+                                type="text"
+                                id="contact-name"
+                                name="Name"
+                                placeholder="Enter your name"
+                                required>
+
+                            <label for="contact-email">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                id="contact-email"
+                                name="Email"
+                                placeholder="you@example.com"
+                                required>
+
+                            <label for="contact-message">
+                                Your Message
+                            </label>
+                            <textarea
+                                id="contact-message"
+                                name="Message"
+                                placeholder="Write your message here..."
+                                required></textarea>
+
+                            <button type="submit"
+                                    class="contact-submit">
+                                Send Message &nbsp; →
+                            </button>
+
+                        </form>
+
+                        <a href="{% url 'home' %}"
+                           class="contact-back">
+                            ← Back to Home
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 </div>
 
 {% endblock %}
