@@ -29,21 +29,38 @@ class PostListView(ListView):
             status="published"
         ).order_by("-created_at")
 
-        category_name = self.request.GET.get("category", "").strip()
+        category_name = self.request.GET.get(
+            "category", ""
+        ).strip()
+
+        search_query = self.request.GET.get(
+            "q", ""
+        ).strip()
 
         if category_name:
             queryset = queryset.filter(
                 category__name__iexact=category_name
             )
 
+        if search_query:
+            queryset = queryset.filter(
+                models.Q(title__icontains=search_query)
+                | models.Q(content__icontains=search_query)
+            )
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["categories"] = Category.objects.all()
         context["selected_category"] = self.request.GET.get(
             "category", ""
         ).strip()
+        context["search_query"] = self.request.GET.get(
+            "q", ""
+        ).strip()
+
         return context
 
 
@@ -80,6 +97,7 @@ class CategoryPostsView(ListView):
         context = super().get_context_data(**kwargs)
         context["category"] = self.category
         context["categories"] = Category.objects.all()
+
         return context
 
 
@@ -99,16 +117,22 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["comments"] = self.object.comments.select_related(
             "author"
         ).order_by("-created_at")
+
         context["comment_form"] = CommentForm()
+
         return context
 
 
 def add_comment(request, slug):
     if not request.user.is_authenticated:
-        messages.info(request, "Please log in to leave a comment.")
+        messages.info(
+            request,
+            "Please log in to leave a comment.",
+        )
         return redirect("login")
 
     post = get_object_or_404(
@@ -125,9 +149,15 @@ def add_comment(request, slug):
             comment.author = request.user
             comment.save()
 
-            messages.success(request, "Comment added successfully!")
+            messages.success(
+                request,
+                "Comment added successfully!",
+            )
         else:
-            messages.error(request, "Please enter a valid comment.")
+            messages.error(
+                request,
+                "Please enter a valid comment.",
+            )
 
     return redirect("post_detail", slug=post.slug)
 
@@ -137,7 +167,10 @@ def delete_comment(request, pk):
         return redirect("login")
 
     comment = get_object_or_404(
-        Comment.objects.select_related("post", "post__author"),
+        Comment.objects.select_related(
+            "post",
+            "post__author",
+        ),
         pk=pk,
     )
 
@@ -148,16 +181,31 @@ def delete_comment(request, pk):
         ):
             post_slug = comment.post.slug
             comment.delete()
-            messages.success(request, "Comment deleted successfully!")
-            return redirect("post_detail", slug=post_slug)
+
+            messages.success(
+                request,
+                "Comment deleted successfully!",
+            )
+
+            return redirect(
+                "post_detail",
+                slug=post_slug,
+            )
 
         messages.error(
             request,
             "You do not have permission to delete this comment.",
         )
-        return redirect("post_detail", slug=comment.post.slug)
 
-    return redirect("post_detail", slug=comment.post.slug)
+        return redirect(
+            "post_detail",
+            slug=comment.post.slug,
+        )
+
+    return redirect(
+        "post_detail",
+        slug=comment.post.slug,
+    )
 
 
 def about(request):
@@ -184,10 +232,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
         messages.success(
             self.request,
             "Post created successfully!",
         )
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -215,6 +265,7 @@ class PostUpdateView(
             self.request,
             "Post updated successfully!",
         )
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -242,6 +293,7 @@ class PostDeleteView(
             self.request,
             "Post deleted successfully!",
         )
+
         return super().form_valid(form)
 
 
@@ -253,6 +305,7 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         login(self.request, self.object)
+
         return response
 
 

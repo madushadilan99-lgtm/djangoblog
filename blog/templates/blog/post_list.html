@@ -100,6 +100,78 @@
     color: #192b43;
 }
 
+/* Search */
+.journey-search {
+    margin-bottom: 38px;
+    padding: 24px;
+    border: 1px solid #e8eef5;
+    border-radius: 16px;
+    background: #f8fbff;
+    box-shadow: 0 5px 20px rgba(26,48,78,.05);
+}
+
+.journey-search-title {
+    margin-bottom: 14px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.journey-search-form {
+    display: flex;
+    gap: 10px;
+}
+
+.journey-search-input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 16px;
+    border: 1px solid #d6e0ed;
+    border-radius: 9px;
+    background: white;
+    color: #192b43;
+    font-size: 14px;
+    outline: none;
+}
+
+.journey-search-input:focus {
+    border-color: #1677ee;
+    box-shadow: 0 0 0 3px rgba(22,119,238,.12);
+}
+
+.journey-search-button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 9px;
+    background: #1677ee;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.journey-search-button:hover {
+    background: #075bc4;
+}
+
+.journey-clear-search {
+    display: inline-block;
+    margin-top: 12px;
+    color: #1677ee;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.journey-clear-search:hover {
+    text-decoration: underline;
+}
+
+.journey-search-result {
+    margin-top: 14px;
+    color: #52647a;
+    font-size: 13px;
+}
+
 .journey-section {
     margin-bottom: 38px;
 }
@@ -234,6 +306,18 @@
     .journey-post-grid .card-img-top {
         height: 200px !important;
     }
+
+    .journey-search {
+        padding: 18px;
+    }
+
+    .journey-search-form {
+        flex-direction: column;
+    }
+
+    .journey-search-button {
+        width: 100%;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -287,6 +371,55 @@
         </div>
     </section>
 
+    <!-- Search Stories -->
+    <section class="journey-search">
+
+        <h2 class="journey-search-title">
+            🔎 Find Your Story
+        </h2>
+
+        <form method="get"
+              action="{% url 'home' %}"
+              class="journey-search-form">
+
+            <input
+                type="search"
+                name="q"
+                class="journey-search-input"
+                placeholder="Search stories by title or content..."
+                value="{{ search_query }}"
+                aria-label="Search stories"
+            >
+
+            {% if selected_category %}
+                <input
+                    type="hidden"
+                    name="category"
+                    value="{{ selected_category }}"
+                >
+            {% endif %}
+
+            <button type="submit"
+                    class="journey-search-button">
+                Search
+            </button>
+
+        </form>
+
+        {% if search_query %}
+            <div class="journey-search-result">
+                Results for <strong>"{{ search_query }}"</strong>
+                — {{ page_obj.paginator.count }} story/stories found.
+            </div>
+
+            <a href="{% url 'home' %}"
+               class="journey-clear-search">
+                ✕ Clear search
+            </a>
+        {% endif %}
+
+    </section>
+
     <section class="journey-section">
         <div class="journey-heading">
             <h2><span>✦</span> Explore by Category</h2>
@@ -327,21 +460,37 @@
                 </div>
             {% empty %}
                 <div class="col-12">
-                    <p class="text-muted">No categories available yet.</p>
+                    <p class="text-muted">
+                        No categories available yet.
+                    </p>
                 </div>
             {% endfor %}
         </div>
     </section>
 
     <section class="journey-section" id="latest-stories">
+
         <div class="journey-heading">
-            <h2><span>✦</span> Latest Stories</h2>
+            <h2>
+                <span>✦</span>
+                {% if search_query %}
+                    Search Results
+                {% else %}
+                    Latest Stories
+                {% endif %}
+            </h2>
+
             <span class="text-muted small">
-                Discover something new
+                {% if search_query %}
+                    Matching stories
+                {% else %}
+                    Discover something new
+                {% endif %}
             </span>
         </div>
 
         <div class="row journey-post-grid">
+
             {% for post in page_obj %}
 
                 {% include "blog/partials/_post_card.html" %}
@@ -350,27 +499,45 @@
 
                 <div class="col-12">
                     <div class="journey-empty">
-                        <h3>No stories yet</h3>
-                        <p>Be the first to share your story.</p>
 
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'post_create' %}"
+                        {% if search_query %}
+                            <h3>No matching stories</h3>
+                            <p>
+                                Try another word or search phrase.
+                            </p>
+
+                            <a href="{% url 'home' %}"
                                class="journey-btn journey-btn-primary">
-                                Write Your First Story
+                                View All Stories
                             </a>
                         {% else %}
-                            <a href="{% url 'login' %}"
-                               class="journey-btn journey-btn-primary">
-                                Login to Get Started
-                            </a>
+                            <h3>No stories yet</h3>
+                            <p>
+                                Be the first to share your story.
+                            </p>
+
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'post_create' %}"
+                                   class="journey-btn journey-btn-primary">
+                                    Write Your First Story
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}"
+                                   class="journey-btn journey-btn-primary">
+                                    Login to Get Started
+                                </a>
+                            {% endif %}
                         {% endif %}
+
                     </div>
                 </div>
 
             {% endfor %}
+
         </div>
 
         {% include "blog/partials/_pagination.html" %}
+
     </section>
 
 </div>
