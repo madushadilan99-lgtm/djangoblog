@@ -1,32 +1,136 @@
 {% extends "blog/base.html" %}
 
-{% block title %}My Posts{% endblock %}
+{% block title %}My Stories | Japan Journey{% endblock %}
 
 {% block content %}
 
-<h1>My Posts</h1>
+<style>
+    .my-posts-page {
+        position: relative;
+        isolation: isolate;
+        min-height: 75vh;
+        padding: 24px;
+        border-radius: 18px;
+        color: #192b43;
+    }
 
-<div class="row">
+    /* Animated Japan background */
+    .my-posts-background {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image: url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80");
+        background-size: cover;
+        background-position: center;
+        animation: japanBackground 24s infinite;
+    }
 
-    {% for post in page_obj %}
+    .my-posts-background::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 246, 240, 0.58);
+    }
 
-        {% include "blog/partials/_post_card.html" %}
+    @keyframes japanBackground {
+        0%, 100% {
+            background-image: url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80");
+            transform: scale(1);
+        }
 
-    {% empty %}
+        33% {
+            background-image: url("https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1920&q=80");
+            transform: scale(1.03);
+        }
 
-        <div class="col-12">
-            <p class="text-center text-muted py-5">
-                You haven't written any posts yet.
-                <a href="{% url 'post_create' %}">
-                    Write your first post
-                </a>
+        66% {
+            background-image: url("https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=1920&q=80");
+            transform: scale(1);
+        }
+    }
+
+    .my-posts-heading {
+        margin-bottom: 30px;
+    }
+
+    .my-posts-grid .journey-story-image {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .my-posts-grid .journey-story-image img {
+        display: block;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .my-posts-grid .journey-story-card {
+        height: 100%;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(25, 43, 67, 0.08);
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(25, 43, 67, 0.09);
+    }
+
+    @media (max-width: 576px) {
+        .my-posts-page {
+            padding: 12px;
+        }
+
+        .my-posts-grid .journey-story-image,
+        .my-posts-grid .journey-story-image img {
+            height: 200px;
+        }
+    }
+</style>
+
+<div class="my-posts-page">
+
+    <div class="my-posts-background" aria-hidden="true"></div>
+
+    <div class="my-posts-heading d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1>My Stories</h1>
+            <p class="mb-0">
+                Your personal collection of stories from Japan.
             </p>
         </div>
 
-    {% endfor %}
+        <a href="{% url 'post_create' %}" class="btn btn-primary">
+            + Write a Story
+        </a>
+    </div>
+
+    <div class="row my-posts-grid">
+
+        {% for post in page_obj %}
+
+            {% include "blog/partials/_post_card.html" %}
+
+        {% empty %}
+
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <h4>No stories yet</h4>
+                    <p>You haven't written any posts yet.</p>
+
+                    <a href="{% url 'post_create' %}" class="btn btn-primary">
+                        Write Your First Story
+                    </a>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% include "blog/partials/_pagination.html" %}
 
 </div>
-
-{% include "blog/partials/_pagination.html" %}
 
 {% endblock %}
