@@ -9,144 +9,183 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
-
     <style>
         body {
-            background: #f7f9fc;
+            margin: 0;
+            background: #f4f6f8;
             color: #192b43;
             font-family: Arial, sans-serif;
         }
 
         .journey-navbar {
-            background: rgba(12, 29, 52, 0.97);
-            padding: 15px 0;
-            box-shadow: 0 5px 25px rgba(12, 29, 52, 0.12);
+            position: relative;
+            z-index: 1000;
+            width: 100%;
+            background: #0c1d34;
+            padding: 20px 0;
+            box-shadow: 0 5px 25px rgba(12, 29, 52, 0.15);
+        }
+
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 22px;
         }
 
         .journey-brand {
             display: flex;
             align-items: center;
-            gap: 11px;
-            color: #fff !important;
-            font-size: 19px;
-            font-weight: 800;
-            letter-spacing: 1px;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            line-height: 1.5;
+            flex-shrink: 0;
+        }
+
+        .journey-brand:hover {
+            color: #e7c98b;
         }
 
         .journey-brand-mark {
-            display: grid;
-            place-items: center;
-            width: 39px;
-            height: 39px;
-            border-radius: 12px;
-            background: #1677ee;
-            color: white;
-            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 43px;
+            height: 43px;
+            border: 1px solid #d8b879;
+            border-radius: 50%;
+            color: #e7c98b;
+            font-size: 23px;
         }
 
         .journey-subbrand {
             display: block;
             margin-top: 3px;
-            color: #a9c4e5;
+            color: #bdc8d6;
             font-size: 9px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
+            font-weight: 400;
         }
 
-        .journey-navbar .nav-link {
-            color: #d4dfed !important;
-            font-size: 13px;
-            padding: 10px 13px !important;
-            transition: color .2s ease;
+        .journey-menu {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            column-gap: 12px;
+            row-gap: 10px;
         }
 
-        .journey-navbar .nav-link:hover,
-        .journey-navbar .nav-link.active {
-            color: #7dd3fc !important;
-        }
-
-        .journey-navbar .navbar-toggler {
-            border-color: rgba(255,255,255,.3);
-        }
-
-        .journey-navbar .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(125,211,252,.2);
-        }
-
-        .journey-write-btn {
-            background: #1677ee;
-            color: white !important;
+        .journey-menu a {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 11px 15px;
+            text-decoration: none;
+            white-space: nowrap;
             border-radius: 8px;
-            padding: 10px 15px !important;
-            font-weight: 700;
-            transition: background .2s ease, transform .2s ease;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
-        .journey-write-btn:hover {
-            background: #075bc4;
-            transform: translateY(-2px);
+        .journey-menu a:hover,
+        .journey-menu a.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e7c98b;
         }
 
         .journey-account {
-            color: #d4dfed;
-            font-size: 12px;
-            padding: 8px 10px;
+            color: #dce5ef;
+            font-size: 13px;
+            padding: 8px 5px;
+            white-space: nowrap;
         }
 
-        .journey-outline-btn {
-            border: 1px solid #8298b3;
-            color: white;
+        .journey-logout-form {
+            display: inline-flex;
+            margin: 0;
+        }
+
+        .journey-logout-btn {
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: transparent;
+            color: #ffffff;
+            padding: 10px 15px;
             border-radius: 8px;
-            font-size: 12px;
-            padding: 8px 13px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
         }
 
-        .journey-outline-btn:hover {
-            background: white;
-            color: #192b43;
+        .journey-logout-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .journey-main {
             min-height: 65vh;
+            padding-bottom: 35px;
         }
 
-        .journey-footer {
+        footer {
+            margin-top: 35px;
+            padding: 25px 15px;
+            text-align: center;
             background: #0c1d34;
-            color: #c4d2e4;
-            padding: 30px 15px;
-            font-size: 12px;
+            color: #bdc8d6;
+            font-size: 13px;
         }
 
-        .journey-footer strong {
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 991px) {
-            .journey-navbar .navbar-nav {
-                padding-top: 8px;
+        @media (max-width: 767px) {
+            .journey-navbar {
+                padding: 18px 0;
             }
 
-            .journey-navbar .nav-link {
-                padding: 10px 4px !important;
+            .navbar-inner {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .journey-brand {
+                align-self: flex-start;
+            }
+
+            .journey-menu {
+                justify-content: flex-start;
+                column-gap: 8px;
+                row-gap: 9px;
+                padding-top: 14px;
+                border-top: 1px solid rgba(255, 255, 255, 0.18);
+            }
+
+            .journey-menu a {
+                padding: 10px 12px;
             }
 
             .journey-account {
-                padding-left: 4px;
-            }
-
-            .journey-write-btn {
-                display: inline-block;
-                width: fit-content;
-                margin: 5px 0;
+                padding: 8px 5px;
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: .01ms !important;
-                transition-duration: .01ms !important;
+        @media (max-width: 400px) {
+            .journey-menu {
+                column-gap: 5px;
+                row-gap: 8px;
+            }
+
+            .journey-menu a {
+                font-size: 13px;
+                padding: 9px 10px;
+            }
+
+            .journey-brand {
+                font-size: 15px;
             }
         }
     </style>
@@ -154,10 +193,10 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark journey-navbar">
-    <div class="container">
+<nav class="journey-navbar">
+    <div class="container navbar-inner">
 
-        <a class="navbar-brand journey-brand" href="{% url 'home' %}">
+        <a class="journey-brand" href="{% url 'home' %}">
             <span class="journey-brand-mark">旅</span>
             <span>
                 JAPAN JOURNEY
@@ -165,67 +204,50 @@
             </span>
         </a>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navMenu"
-                aria-controls="navMenu"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="journey-menu">
 
-        <div class="collapse navbar-collapse" id="navMenu">
+            <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+               href="{% url 'home' %}">
+                Home
+            </a>
 
-            <div class="navbar-nav me-auto ms-lg-4">
+            <a class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+               href="{% url 'about' %}">
+                About
+            </a>
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
-                   href="{% url 'home' %}">Home</a>
+            <a class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+               href="{% url 'contact' %}">
+                Contact
+            </a>
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
-                   href="{% url 'about' %}">About</a>
+            {% if request.user.is_authenticated %}
 
-                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
-                   href="{% url 'contact' %}">Contact</a>
+                <a class="{% if request.resolver_match.url_name == 'my_posts' %}active{% endif %}"
+                   href="{% url 'my_posts' %}">
+                    My Stories
+                </a>
 
-                {% if request.user.is_authenticated %}
-                    <a class="nav-link {% if request.resolver_match.url_name == 'my_posts' %}active{% endif %}"
-                       href="{% url 'my_posts' %}">My Stories</a>
-                {% endif %}
+                <span class="journey-account">
+                    Hi, {{ request.user.username }}
+                </span>
 
-            </div>
+                <form method="post"
+                      action="{% url 'logout' %}"
+                      class="journey-logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="journey-logout-btn">
+                        Logout
+                    </button>
+                </form>
 
-            <div class="navbar-nav align-items-lg-center gap-lg-2">
+            {% else %}
 
-                {% if request.user.is_authenticated %}
+                <a href="{% url 'login' %}">Login</a>
 
-                    <a class="nav-link journey-write-btn"
-                       href="{% url 'post_create' %}">+ Write a Story</a>
+                <a href="{% url 'register' %}">Join the Journey</a>
 
-                    <span class="journey-account">
-                        Hi, {{ request.user.username }}
-                    </span>
-
-                    <form method="post"
-                          action="{% url 'logout' %}"
-                          class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="btn journey-outline-btn my-1">
-                            Logout
-                        </button>
-                    </form>
-
-                {% else %}
-
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-
-                    <a class="nav-link journey-write-btn"
-                       href="{% url 'register' %}">Join the Journey +</a>
-
-                {% endif %}
-
-            </div>
+            {% endif %}
 
         </div>
     </div>
@@ -246,14 +268,14 @@
         {% endfor %}
     {% endif %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
 
 </main>
 
-<footer class="journey-footer text-center mt-5">
-    <p class="mb-2"><strong>JAPAN JOURNEY</strong></p>
-    <p class="mb-2">Places to wander, flavors to remember, stories to share.</p>
-    <p class="mb-0">&copy; 2026 Japan Journey. Built with Django.</p>
+<footer>
+    <div>© {% now "Y" %} Japan Journey</div>
+    <div class="mt-1">Discover Japan, one story at a time.</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
